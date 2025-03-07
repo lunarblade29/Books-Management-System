@@ -5,7 +5,7 @@ from datetime import datetime
 
 app = Flask(__name__)
 
-EXCEL_FILE = "book_requests.xlsx"
+EXCEL_FILE = "/home/iimcbooks/book_requests.xlsx"
 
 # Create the Excel file if it doesn't exist
 if not os.path.exists(EXCEL_FILE):

@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify, send_file
 import pandas as pd
 import os
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -8,7 +9,8 @@ EXCEL_FILE = "book_requests.xlsx"
 
 # Create the Excel file if it doesn't exist
 if not os.path.exists(EXCEL_FILE):
-    df = pd.DataFrame(columns=["Name", "Course", "Term", "Book Name", "Author Name", "Edition", "Publisher"])
+    df = pd.DataFrame(
+        columns=["Name", "Course", "Term", "Book Name", "Author Name", "Edition", "Publisher", "Submit Date"])
     df.to_excel(EXCEL_FILE, index=False, engine="openpyxl")
 
 
@@ -22,11 +24,12 @@ def index():
         author_name = request.form["author_name"]
         edition = request.form["edition"]
         publisher = request.form["publisher"]
-
+        submit_date = datetime.today().strftime("%Y-%m-%d")  # Auto-fills today's date
 
         # Append new data to the Excel file
         df = pd.read_excel(EXCEL_FILE, engine="openpyxl")
-        new_data = pd.DataFrame([[name, course, term, book_name, author_name, edition, publisher]], columns=df.columns)
+        new_data = pd.DataFrame([[name, course, term, book_name, author_name, edition, publisher, submit_date]],
+                                columns=df.columns)
         df = pd.concat([df, new_data], ignore_index=True)
         df.to_excel(EXCEL_FILE, index=False, engine="openpyxl")
 
